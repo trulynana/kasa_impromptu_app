@@ -1,2 +1,3 @@
 # kasa_impromptu_app
-The App for Stutterers, Stammerers, and Your's Truly
+The App for Stutterers and Stammerers Alike
+More to be added...
