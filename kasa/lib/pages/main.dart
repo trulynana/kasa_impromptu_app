@@ -16,7 +16,7 @@ class MainApp extends StatelessWidget {
         '/homepage': (context) => KasaHome(),
         '/startup': (context) => JustKasa()
       },
-      debugShowCheckedModeBanner: false);
+      debugShowCheckedModeBanner: true);
   }
 }
 
