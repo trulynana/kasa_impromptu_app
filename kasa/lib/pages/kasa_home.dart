@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kasa/assets/colors.dart';
 import 'package:word_generator/word_generator.dart';
@@ -11,12 +13,13 @@ class KasaHome extends StatefulWidget {
 }
 
 class _KasaHomeState extends State<KasaHome> {
-
   static const String defaultWord = "Word Bank";
 
-  String username = "Nana";
+  String username = "User";
   final randomWord = WordGenerator();
   String wordBank = defaultWord;
+
+  // int expVal = Random(100) as int;
 
   void updateWord() {
     setState(() {
@@ -28,6 +31,24 @@ class _KasaHomeState extends State<KasaHome> {
     setState(() {
       wordBank = defaultWord;
     });
+  }
+
+  late ValueNotifier<double> valueNotifier;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Timer(const Duration(seconds: 0), () {
+      valueNotifier.value = 60;
+    });
+    valueNotifier = ValueNotifier(0.0);
+  }
+
+  @override
+  void dispose() {
+    valueNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -75,50 +96,91 @@ class _KasaHomeState extends State<KasaHome> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                    setState(() {
-                      resetWord();
-                    });
-                  }, 
-                  child: Text("Reset Word"),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: kasaColors.cream,
-                    backgroundColor: kasaColors.sandy
+                      setState(() {
+                        resetWord();
+                      });
+                    },
+                    child: Text("Reset Word"),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: kasaColors.cream,
+                      backgroundColor: kasaColors.sandy,
+                    ),
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        updateWord();
+                      });
+                      //   print(wordBank);
+                    },
+                    child: Text("Generate Word"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kasaColors.sandy,
+                      foregroundColor: kasaColors.cream,
+                    ),
                   ),
-                   ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    updateWord();
-                  });
-               //   print(wordBank);
-                },
-                child: Text("Generate Word"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: kasaColors.sandy,
-                  foregroundColor: kasaColors.cream
-                ),
-              )
                 ],
               ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       updateWord();
-              //     });
-              //     print(wordBank);
-              //   },
-              //   child: Text("Generate Word"),
-              // ),
+             
               Padding(
                 padding: EdgeInsets.only(left: 10.0),
-                child: CircleText(text: wordBank),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/wordbank');
+                  },
+                  customBorder: const CircleBorder(),
+                  splashColor: kasaColors.cream,
+                  child: CircleText(text: wordBank, size: 170,)
+                  ),
               ),
             ],
           ),
 
-          const Padding(
-            padding: EdgeInsets.only(right: 140.0),
-            child: CircleText(text: "Level"),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 50.0),
+                child: SimpleCircularProgressBar(
+                  size: 150,
+                  progressStrokeWidth: 24,
+                  backStrokeWidth: 24,
+                  animationDuration: 5,
+                  fullProgressColor: kasaColors.mocha,
+                  mergeMode: false,
+                  maxValue: 100,
+                  valueNotifier: valueNotifier,
+                  progressColors: const [
+                    Colors.red,
+                    Colors.yellow,
+                    Colors.green,
+                  ],
+                  onGetText: (value) {
+                    return Text('${value.toInt()}');
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0),
+                child: Card(
+                  color: kasaColors.mocha,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 40),
+                      child: Text(
+                        "Level 1",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: kasaColors.cream
+                        ),
+                        ),
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
 
           SizedBox(width: 100, height: 50),
@@ -144,7 +206,7 @@ class CircleText extends StatelessWidget {
   const CircleText({
     super.key,
     required this.text,
-    this.size = 170,
+    required this.size,
     this.color = Colors.white,
     this.style,
   });

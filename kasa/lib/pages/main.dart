@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kasa/pages/functionalities/word_bank.dart';
 import 'package:kasa/pages/kasa_home.dart';
 
 void main() {
@@ -14,7 +15,8 @@ class MainApp extends StatelessWidget {
       home: JustKasa(), 
       routes: {
         '/homepage': (context) => KasaHome(),
-        '/startup': (context) => JustKasa()
+        '/startup': (context) => JustKasa(),
+        '/wordbank': (context) => WordBankScreen()
       },
       debugShowCheckedModeBanner: true);
   }
@@ -101,7 +103,9 @@ class _JustKasa extends State<JustKasa> {
               fontSize: 20
             ),
             )
-          )
+          ),
+
+          
         ],
       ),
     );
